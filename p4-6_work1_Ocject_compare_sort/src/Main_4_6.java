@@ -24,12 +24,7 @@ public class Main_4_6 {
 		employees.add(e8);
 		employees.add(e9);
 
-		Comparator<Employee> comparatorAge = new Comparator<Employee>() {
-			@Override
-			public int compare(Employee o1, Employee o2) {
-				return Integer.compare(o1.getAge(), o2.getAge());
-			}
-		};
+		Comparator<Employee> comparatorAge = Comparator.comparing(Employee::getAge);
 
 		employees.sort(comparatorAge);
 
