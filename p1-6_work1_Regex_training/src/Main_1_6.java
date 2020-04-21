@@ -1,6 +1,5 @@
 public class Main_1_6 {
 	public static void main(String[] args) {
-		int count = 0;
 		String[] split = text.split("[r|R][a-zA-Z]+t ");
 
 		System.out.println("rで始まりtで終わる単語は全部で"+ (split.length -1) +"個あります。");
