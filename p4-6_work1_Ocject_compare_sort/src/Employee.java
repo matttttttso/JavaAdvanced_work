@@ -23,6 +23,6 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "社員番号:" + num + "社員名:" + name + "年齢:" + age;
+		return "社員番号： \t" + num + "\t 社員名： \t\t" + name + "\t\t 年齢：" + age;
 	}
 }

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class Main_4_6 {
 	public static void main(String args[]) {
@@ -24,12 +25,32 @@ public class Main_4_6 {
 		employees.add(e8);
 		employees.add(e9);
 
-		Comparator<Employee> comparatorAge = Comparator.comparing(Employee::getAge);
+		Comparator<Employee> byAge = Comparator.comparing(Employee::getAge);
+		Comparator<Employee> byNum = Comparator.comparing(Employee::getNum);
+		Comparator<Employee> byNumReversed = byNum.reversed();
+		Comparator<Employee> byName = Comparator.comparing(Employee::getName);
+		Comparator<Employee> byNameReversed = byName.reversed();
 
-		employees.sort(comparatorAge);
+		int input;
 
-		for (Employee Employee : employees) {
-			System.out.println(Employee.toString());
+		while(true) {
+			System.out.print("ソートする基準を選んでください。\n[1:社員番号(昇順) 2:社員名(昇順) 3:社員番号(降順) 9:終了]>");
+			input = new Scanner(System.in).nextInt();
+
+			if (input == 1) {
+				employees.sort(byNum);
+			} else if (input == 2) {
+				employees.sort(byName);
+			} else if (input == 3) {
+				employees.sort(byNumReversed);
+			} else if (input == 9) {
+				System.out.println("\nEND");
+				break;
+			}
+
+			for (Employee Employee : employees) {
+				System.out.println(Employee.toString());
+			}
 		}
 	}
 }
