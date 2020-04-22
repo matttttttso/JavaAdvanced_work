@@ -31,11 +31,12 @@ public class Main_4_6 {
 		Comparator<Employee> byName = Comparator.comparing(Employee::getName);
 		Comparator<Employee> byNameReversed = byName.reversed();
 
+		Scanner scanner = new Scanner(System.in);
 		int input;
 
 		while(true) {
 			System.out.print("ソートする基準を選んでください。\n[1:社員番号(昇順) 2:社員名(昇順) 3:社員番号(降順) 9:終了]>");
-			input = new Scanner(System.in).nextInt();
+			input = scanner.nextInt();
 
 			if (input == 1) {
 				employees.sort(byNum);
@@ -45,6 +46,7 @@ public class Main_4_6 {
 				employees.sort(byNumReversed);
 			} else if (input == 9) {
 				System.out.println("\nEND");
+				scanner.close();
 				break;
 			}
 
