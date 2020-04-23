@@ -15,7 +15,10 @@ public class Main_6_4 {
 		System.out.println("****************************************");
 		words.stream()
 				.filter(word -> word.length() >= 10)
-				.forEach(word -> System.out.println("[" + word + "]:文字数:" + word.length()));
+				.forEach(word
+						-> System.out.println("[" + word + "]:文字数:" + word.length()
+						)
+						);
 	}
 
 	public static String text = "Alice was beginning to get very tired of sitting by "
