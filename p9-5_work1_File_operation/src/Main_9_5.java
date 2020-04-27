@@ -1,9 +1,9 @@
 import static java.nio.file.StandardOpenOption.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ public class Main_9_5 {
 	public static void main(String[] args) {
 		Path inputPath = Paths.get(INPUT_FILE_PATH);
 		Path outputPath = Paths.get(OUTPUT_FILE_PATH);
-		int level,
-			money,
+		int level = 0,
+			money = 0,
 			row_blank,
 			kougyoku;
 		final int NEGATIVE = (-1),
@@ -34,45 +34,68 @@ public class Main_9_5 {
 		final String BLANK = "",
 				OUENKI = "応援旗",
 				KOUGYOKU = "鋼玉",
-				SP_SWORD = "スペシャルソード";
+				SP_SWORD = "スペシャルソード",
+				YES = "y",
+				NO = "n";
 
 		// 出力用のArrayList
 		List<String> outputLines = new ArrayList<String>();
+		List<String> inputLines = new ArrayList<String>();
 		try {
-			List<String> inputLines = Files.readAllLines(inputPath);
-			for (String line : inputLines) {
-				String[] splitLineArray = line.split(",", NEGATIVE);
-				List<String> tmpList = new ArrayList<String>(Arrays.asList(splitLineArray));
+			inputLines = Files.readAllLines(inputPath);
+		} catch (NoSuchFileException e) {
+			System.out.println("CSVファイルが見つかりません。");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (String line : inputLines) {
+			String[] splitLineArray = line.split(",", NEGATIVE);
+			List<String> tmpList = new ArrayList<String>(Arrays.asList(splitLineArray));
+
+			try {
 				level = Integer.parseInt(tmpList.get(ROW_LEVEL));
 				money = Integer.parseInt(tmpList.get(ROW_MONEY));
-				if (level == INITIAL) {
-					row_blank = tmpList.indexOf(BLANK);
-					if (row_blank == NEGATIVE) {
-						tmpList.set(ROW_MONEY, String.valueOf(money += KAWARI));
-					} else if (row_blank != NEGATIVE) {
-						tmpList.set(row_blank, OUENKI);
-					}
-				}
-				if (level <= BIGINNER_LAYER) {
-					tmpList.set(ROW_MONEY, String.valueOf(money += SHITAKUKIN));
-				}
-				kougyoku = tmpList.indexOf(KOUGYOKU);
-				if (kougyoku != NEGATIVE) {
-					tmpList.set(kougyoku, SP_SWORD);
-				}
-				outputLines.add(String.join(",", tmpList));
+			} catch (NumberFormatException e) {
+				System.out.println("レベルの値に異常値が含まれています。");
 			}
+
+			if (level == INITIAL) {
+				row_blank = tmpList.indexOf(BLANK);
+				if (row_blank == NEGATIVE) {
+					tmpList.set(ROW_MONEY, String.valueOf(money += KAWARI));
+				} else if (row_blank != NEGATIVE) {
+					tmpList.set(row_blank, OUENKI);
+				}
+			}
+			if (level <= BIGINNER_LAYER) {
+				tmpList.set(ROW_MONEY, String.valueOf(money += SHITAKUKIN));
+			}
+			kougyoku = tmpList.indexOf(KOUGYOKU);
+			if (kougyoku != NEGATIVE) {
+				tmpList.set(kougyoku, SP_SWORD);
+			}
+			outputLines.add(String.join(",", tmpList));
+		}
+		try {
 			Files.write(outputPath, outputLines, CREATE_NEW);
-			System.out.println("処理終了");
-		} catch (FileNotFoundException e) {
-			System.out.println("CSVファイルが見つかりません。");
+			System.out.println("作業が終了しました。");
 		} catch (FileAlreadyExistsException e) {
 			System.out.println("ファイルを上書きしますか? [y/n]");
 			Scanner scanner = new Scanner(System.in);
+			String input = scanner.next();
+			if(input.equals(YES)) {
+				try {
+					Files.write(outputPath, outputLines, TRUNCATE_EXISTING);
+					System.out.println("ファイルを上書きしました。");
+				} catch (IOException error) {
+					error.printStackTrace();
+				}
+			} else if(input.equals(NO)){
+				System.out.println("作業を中断しました。");
+			}
+			scanner.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			System.out.println("レベルの値に異常値が含まれています。");
 		}
 	}
 }
