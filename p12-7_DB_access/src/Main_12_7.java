@@ -17,7 +17,7 @@ public class Main_12_7 {
 				searchZipcode,
 				searchPref,
 				searchCity;
-		Scanner scanner = new Scanner(System.in, "UTF-8");
+		Scanner scanner = new Scanner(System.in);
 
 		try {
 			Class.forName("org.h2.Driver");
@@ -178,10 +178,8 @@ public class Main_12_7 {
 					System.out.println("\n都道府県名・市町村名検索----------------------------");
 					System.out.print("検索する都道府県名を入力してください。 [終了:q] >");
 					searchPref = scanner.next();
-					System.out.println("入力値：" + searchPref);
 					System.out.print("検索する市町村名を入力してください。 [終了:q] >");
 					searchCity = scanner.next();
-					System.out.println("入力値：" + searchCity);
 					indexRow = 0;
 					T_LOOP: while(true) {
 						try(
