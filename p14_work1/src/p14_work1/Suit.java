@@ -1,5 +1,6 @@
 package p14_work1;
 
+//カードのマークのenum
 public enum Suit {
 //	CLUB("♣"),
 	DIAMOND("♦"),
@@ -8,11 +9,13 @@ public enum Suit {
 
 	private String suit;
 
-	Suit(String mark){
-		this.suit = mark;
-	}
-
+	//getter
 	public String getSuit() {
 		return suit;
+	}
+
+	//コンストラクタ
+	Suit(String mark){
+		this.suit = mark;
 	}
 }
