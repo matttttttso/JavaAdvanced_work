@@ -12,16 +12,8 @@ public class Card {
 		this.suit = suit;
 	}
 
-	public Rank rank() {
-		return rank;
-	}
-
-	public Suit suit() {
-		return suit;
-	}
-
 	public String toString() {
-		return suit.getSuit() + "/" + rank.getLabel();
+		return suit.getSuit() + "-" + rank.getLabel();
 	}
 
 	private static final List<Card> protoDeck = new ArrayList<Card>();
