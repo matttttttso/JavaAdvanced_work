@@ -1,18 +1,29 @@
 package p14_work1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class WarGame {
+	public static final String NEW_LINE = System.lineSeparator();
+	//ファイルの場所
+	private static final String FILE_PLACE = System.getProperty("user.home") + "/Desktop/game_result.csv";
 	//定数
 	static final int	NUM_OF_PLAYER = 2,	//プレイヤー数
 						ZERO = 0,
-						CARD_PUT_OUT = 0;
+						CARD_PUT_OUT = 0,
+						INITIAL_VALUE = 0;
 	static final String	PLAY = "p",
-						BREAK = "b";
-	public static final String NEW_LINE = System.lineSeparator();
-	//スキャナー
+						BREAK = "b",
+						YES = "y",
+						NO = "n";
 	static Scanner scanner = new Scanner(System.in);
 
 //main
@@ -21,15 +32,14 @@ public class WarGame {
 		final String	NAME_PLAYER_1 = "あなた",
 						NAME_PLAYER_2 = "CPU";
 		final int		COUNT_PER_GAME = 13;	//1ゲームあたり13ラウンド(13回戦)
-
 		int	fieldStockCount = 0,	//場に積まれた札数
-			roundCount = 0,			//ラウンド数
-			winCountPlayer1,		//プレイヤー１の勝利数
-			winCountPlayer2,		//プレイヤー２の勝利数
-			gameCount;				//ゲーム（試合）を終了した数
+			roundCount = 0;			//ラウンド数
 	//フィールドメンバ	ここまで↑
 
 	//プログラム記述		ここから↓
+		//CSV読み込み処理
+		choiceRestart();
+		//デッキ作成、シャッフル
 		List<Card> deck = Deck.newDeck();
 		Collections.shuffle(deck);
 
@@ -46,22 +56,67 @@ public class WarGame {
 			player1.getHand().remove(CARD_PUT_OUT);
 			player2.getHand().remove(CARD_PUT_OUT);
 		}
-		scanner.close();
+	;
 	//プログラム記述		ここまで↑
 	}
 
 //メソッドメンバゾーン	ここから↓
+	//CSV読み込み、ゲーム再開か新規ゲームか
+	static void choiceRestart() {
+		List<String> csvHeader = new ArrayList<String>();
+		csvHeader.add(0, "ゲーム数");
+		csvHeader.add(1, "勝利数");
+		csvHeader.add(2, "最大獲得カード数");
+		List<String> readData = new ArrayList<String>();
+		File gameResult = new File(FILE_PLACE);
+		int 	gameCount = 0,	//ゲーム数
+				winCount = 0,	//勝利数
+				maxGotNum = 0;	//最大獲得カード数
+		if(gameResult.exists()) {
+			System.out.printf("中断したゲームを再開しますか? [%s/%s] >", YES, NO);
+			String choiceRestart = scanner.next().toLowerCase();
+			if(choiceRestart.equals(YES)) {
+				try (
+						BufferedReader reader = Files.newBufferedReader(Paths.get(FILE_PLACE));
+					) {
+					for(int rowNum = 0; rowNum < 2; rowNum++) {
+						String line = reader.readLine();
+						if(rowNum == 0) {
+							csvHeader = Arrays.asList(line.split(","));
+						} else if(rowNum == 1) {
+							readData = Arrays.asList(line.split(","));
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("中断したゲームを再開します。");
+				gameCount = Integer.parseInt(readData.get(0));
+				winCount = Integer.parseInt(readData.get(1));
+				maxGotNum = Integer.parseInt(readData.get(2));
+			} else if(choiceRestart.equals(NO)) {
+				System.out.println("新しくゲームを開始します。");
+				gameCount = INITIAL_VALUE;
+				winCount = INITIAL_VALUE;
+				maxGotNum = INITIAL_VALUE;
+			}
+		} else {
+			System.out.println("新規ゲーム開始。");
+			gameCount = INITIAL_VALUE;
+			winCount = INITIAL_VALUE;
+			maxGotNum = INITIAL_VALUE;
+		}
+		System.out.printf("[%s]:%d,%n[%s]:%d,%n[%s]:%d%n", csvHeader.get(0), gameCount, csvHeader.get(1), winCount, csvHeader.get(2), maxGotNum);
+	}
 	//文字列の表示
 	static void printLines(int roundCount, int fieldStockCount, Player player1, Player player2) {
 		System.out.print(NEW_LINE);
 		System.out.println("### 第" + roundCount + "回戦 ###");
 		System.out.println("\t場に積まれた札:\t" + fieldStockCount + "枚");
-		System.out.printf("\t[%s]\t手札枚数: %s枚,\t獲得枚数: %s枚%n",
-				player2.getName(), player2.getHandNum(), player2.getGotNum());
-		System.out.printf("\t[%s]\t手札枚数: %s枚,\t獲得枚数: %s枚%n",
-				player1.getName(), player1.getHandNum(), player1.getGotNum());
+		System.out.printf("\t[%s]\t手札枚数: %s枚,\t獲得枚数: %s枚%n",player2.getName(), player2.getHandNum(), player2.getGotNum());
+		System.out.printf("\t[%s]\t手札枚数: %s枚,\t獲得枚数: %s枚%n",player1.getName(), player1.getHandNum(), player1.getGotNum());
 		System.out.print(NEW_LINE);
-		System.out.print("\t勝負しますか?\t[ '" + PLAY +"':勝負  || '" + BREAK + "':中断 ] >");
+		System.out.printf("\t勝負しますか?\t[ '%s':勝負  || '%s':中断 ] >", PLAY, BREAK);
 		checkChoicePlayGame();
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player2.getName(), player2.getHand().get(CARD_PUT_OUT));
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player1.getName(), player1.getHand().get(CARD_PUT_OUT));
