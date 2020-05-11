@@ -7,7 +7,8 @@ import java.util.Scanner;
 public class WarGame {
 	//定数
 	static final int	NUM_OF_PLAYER = 2,	//プレイヤー数
-						ZERO = 0;
+						ZERO = 0,
+						CARD_PUT_OUT = 0;
 	public static final String NEW_LINE = System.lineSeparator();
 	//スキャナー
 	static Scanner scanner = new Scanner(System.in);
@@ -41,8 +42,8 @@ public class WarGame {
 			roundCount++;
 			printLines(roundCount, fieldStockCount, player1, player2);
 			judge(fieldStockCount, player1, player2);
-			player1.getHand().remove(0);
-			player2.getHand().remove(0);
+			player1.getHand().remove(CARD_PUT_OUT);
+			player2.getHand().remove(CARD_PUT_OUT);
 		}
 		scanner.close();
 	//プログラム記述		ここまで↑
@@ -62,24 +63,24 @@ public class WarGame {
 		System.out.print(NEW_LINE);
 		System.out.print("\t札を切りますか?\t[ 'd':札を切る || 'q':中断 ] >");
 		scanner.next();
-		System.out.printf("\t[%s の札]\t: [ %s ]%n", player2.getName(), player2.getHand().get(0));
-		System.out.printf("\t[%s の札]\t: [ %s ]%n", player1.getName(), player1.getHand().get(0));
+		System.out.printf("\t[%s の札]\t: [ %s ]%n", player2.getName(), player2.getHand().get(CARD_PUT_OUT));
+		System.out.printf("\t[%s の札]\t: [ %s ]%n", player1.getName(), player1.getHand().get(CARD_PUT_OUT));
 	}
 
 	static void judge(int fieldStockCount, Player player1, Player player2) {
-		boolean winPlayer1 = (player1.getHand().get(0).getStrength() > player2.getHand().get(0).getStrength());
-		boolean winPlayer2 = (player2.getHand().get(0).getStrength() > player1.getHand().get(0).getStrength());
-		boolean draw = (player1.getHand().get(0).getStrength() == player2.getHand().get(0).getStrength());
+		boolean winPlayer1 = (player1.getHand().get(CARD_PUT_OUT).getStrength() > player2.getHand().get(CARD_PUT_OUT).getStrength());
+		boolean winPlayer2 = (player2.getHand().get(CARD_PUT_OUT).getStrength() > player1.getHand().get(CARD_PUT_OUT).getStrength());
+		boolean draw = (player1.getHand().get(CARD_PUT_OUT).getStrength() == player2.getHand().get(CARD_PUT_OUT).getStrength());
 		fieldStockCount += NUM_OF_PLAYER;
 		System.out.print(NEW_LINE);
 		if(winPlayer1) {
 			System.out.printf("\t[%s]が獲得しました！%n", player1.getName());
 			player1.setGotNum(player1.getGotNum() + fieldStockCount);
-			fieldStockCount = 0;
+			fieldStockCount = ZERO;
 		}else if(winPlayer2) {
 			System.out.printf("\t[%s]が獲得しました！%n", player2.getName());
 			player2.setGotNum(player2.getGotNum() + fieldStockCount);
-			fieldStockCount = 0;
+			fieldStockCount = ZERO;
 		}else if(draw) {
 			System.out.println("引き分けです。");
 		}
