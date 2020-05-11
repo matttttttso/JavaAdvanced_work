@@ -2,19 +2,19 @@ package p14_work1;
 
 //カードのマークのenum
 public enum Suit {
-//	CLUB("♣"),
+	//CLUB("♣"),
 	DIAMOND("♦"),
-//	HEART("♥"),
+	//HEART("♥"),
 	SPADE("♠");
 
 	private String suit;
 
-	//getter
+//getter
 	public String getSuit() {
 		return suit;
 	}
 
-	//コンストラクタ
+//コンストラクタ
 	Suit(String mark){
 		this.suit = mark;
 	}

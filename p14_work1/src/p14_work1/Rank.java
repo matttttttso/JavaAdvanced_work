@@ -2,7 +2,7 @@ package p14_work1;
 
 //カードの数字のenum
 public enum Rank {
-	//(表示名[label], 強さ[strength])
+//(表示名[label], 強さ[strength])
 	DEUCE("2", 2),
 	TREY("3", 3),
 	CATER("4", 4),
@@ -20,7 +20,7 @@ public enum Rank {
 	private String	label;	//表示名
 	private int		strength;	//強さ
 
-	//getter
+//getter
 	//表示名
 	public String getLabel() {
 		return label;
@@ -30,7 +30,7 @@ public enum Rank {
 		return strength;
 	}
 
-	//コンストラクタ
+//コンストラクタ
 	Rank(String label, int strength){
 		this.label = label;
 		this.strength = strength;
