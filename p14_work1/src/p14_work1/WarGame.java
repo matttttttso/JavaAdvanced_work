@@ -9,6 +9,8 @@ public class WarGame {
 	static final int	NUM_OF_PLAYER = 2,	//プレイヤー数
 						ZERO = 0,
 						CARD_PUT_OUT = 0;
+	static final String	PLAY = "p",
+						BREAK = "b";
 	public static final String NEW_LINE = System.lineSeparator();
 	//スキャナー
 	static Scanner scanner = new Scanner(System.in);
@@ -61,8 +63,8 @@ public class WarGame {
 		System.out.printf("\t[%s]\t手札枚数: %s枚,\t獲得枚数: %s枚%n",
 				player1.getName(), player1.getHandNum(), player1.getGotNum());
 		System.out.print(NEW_LINE);
-		System.out.print("\t札を切りますか?\t[ 'd':札を切る || 'q':中断 ] >");
-		scanner.next();
+		System.out.print("\t勝負しますか?\t[ '" + PLAY +"':勝負  || '" + BREAK + "':中断 ] >");
+		checkChoicePlayGame();
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player2.getName(), player2.getHand().get(CARD_PUT_OUT));
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player1.getName(), player1.getHand().get(CARD_PUT_OUT));
 	}
@@ -74,11 +76,11 @@ public class WarGame {
 		fieldStockCount += NUM_OF_PLAYER;
 		System.out.print(NEW_LINE);
 		if(winPlayer1) {
-			System.out.printf("\t[%s]が獲得しました！%n", player1.getName());
+			System.out.printf("[%s]が獲得しました！%n", player1.getName());
 			player1.setGotNum(player1.getGotNum() + fieldStockCount);
 			fieldStockCount = ZERO;
 		}else if(winPlayer2) {
-			System.out.printf("\t[%s]が獲得しました！%n", player2.getName());
+			System.out.printf("[%s]が獲得しました！%n", player2.getName());
 			player2.setGotNum(player2.getGotNum() + fieldStockCount);
 			fieldStockCount = ZERO;
 		}else if(draw) {
@@ -88,6 +90,21 @@ public class WarGame {
 //メソッドメンバゾーン	ここまで↑
 
 	//例外処理ゾーン	ここから↓
-
+	static void checkChoicePlayGame() {
+		INPUT_LOOP: while(true) {
+			try {
+				String input = scanner.next().toLowerCase();
+				checkChoice(input);
+				break INPUT_LOOP;
+			} catch (InputOutOfBoundException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+	public static void checkChoice(String input) throws InputOutOfBoundException {
+		if (!input.equals(PLAY) && !input.equals(BREAK)) {
+			throw new InputOutOfBoundException("'" + PLAY + "'あるいは'" + BREAK + "'で入力してください");
+		}
+	}
 	//例外処理ゾーン	ここまで↑
 }
