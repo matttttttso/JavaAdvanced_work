@@ -39,8 +39,7 @@ public class WarGame {
 
 		Player player1 = new Player(NAME_PLAYER_1, handPlayer1);
 		Player player2 = new Player(NAME_PLAYER_2, handPlayer2);
-
-		while(roundCount <= COUNT_PER_GAME) {
+		ROUND_LOOP: while(roundCount <= COUNT_PER_GAME) {
 			roundCount++;
 			printLines(roundCount, fieldStockCount, player1, player2);
 			judge(fieldStockCount, player1, player2);
@@ -51,9 +50,8 @@ public class WarGame {
 	//プログラム記述		ここまで↑
 	}
 
-//メソッドメンバゾーン　ここから↓
-
-
+//メソッドメンバゾーン	ここから↓
+	//文字列の表示
 	static void printLines(int roundCount, int fieldStockCount, Player player1, Player player2) {
 		System.out.print(NEW_LINE);
 		System.out.println("### 第" + roundCount + "回戦 ###");
@@ -68,7 +66,7 @@ public class WarGame {
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player2.getName(), player2.getHand().get(CARD_PUT_OUT));
 		System.out.printf("\t[%s の札]\t: [ %s ]%n", player1.getName(), player1.getHand().get(CARD_PUT_OUT));
 	}
-
+	//勝敗判定
 	static void judge(int fieldStockCount, Player player1, Player player2) {
 		boolean winPlayer1 = (player1.getHand().get(CARD_PUT_OUT).getStrength() > player2.getHand().get(CARD_PUT_OUT).getStrength());
 		boolean winPlayer2 = (player2.getHand().get(CARD_PUT_OUT).getStrength() > player1.getHand().get(CARD_PUT_OUT).getStrength());
@@ -89,7 +87,8 @@ public class WarGame {
 	}
 //メソッドメンバゾーン	ここまで↑
 
-	//例外処理ゾーン	ここから↓
+//例外処理ゾーン	ここから↓
+	//入力文字確認
 	static void checkChoicePlayGame() {
 		INPUT_LOOP: while(true) {
 			try {
@@ -103,8 +102,8 @@ public class WarGame {
 	}
 	public static void checkChoice(String input) throws InputOutOfBoundException {
 		if (!input.equals(PLAY) && !input.equals(BREAK)) {
-			throw new InputOutOfBoundException("'" + PLAY + "'あるいは'" + BREAK + "'で入力してください");
+			throw new InputOutOfBoundException("'" + PLAY + "'か'" + BREAK + "'で入力してください");
 		}
 	}
-	//例外処理ゾーン	ここまで↑
+//例外処理ゾーン	ここまで↑
 }
