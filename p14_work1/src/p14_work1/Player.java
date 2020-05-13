@@ -42,9 +42,21 @@ public class Player {
 
 //コンストラクタ(名前、手札)
 	//初期化
-	Player(String name, List<Card> handPlayer) {
+	Player(String name, int gotNum, List<Card> handPlayer) {
 		this.name = name;
-		this.gotNum = 0;	//獲得枚数0
+		this.gotNum = gotNum;	//獲得枚数0
 		this.hand = handPlayer;
+	}
+
+//中断データ作成用
+	public String toBreakFormat() {
+		String toReturn = "";
+		for(int i = 0; i < hand.size(); i++) {
+			toReturn += hand.get(i).toString();
+			if(i != hand.size() - 1) {
+				toReturn += ",";
+			}
+		}
+		return toReturn;
 	}
 }
