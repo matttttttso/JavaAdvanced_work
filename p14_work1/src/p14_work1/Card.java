@@ -1,10 +1,14 @@
 package p14_work1;
 
 public class Card {
-	private final Rank rank; //数字
 	private final Suit suit; //マーク
+	private final Rank rank; //数字
 
 //getter
+	//マーク
+	public String getSuit() {
+		return suit.getSuit();
+	}
 	//表示名
 	public String getLabel() {
 		return rank.getLabel();
@@ -13,15 +17,11 @@ public class Card {
 	public int getStrength() {
 		return rank.getStrength();
 	}
-	//マーク
-	public String getSuit() {
-		return suit.getSuit();
-	}
 
 //コンストラクタ
-	Card(Rank rank, Suit suit) {
-		this.rank = rank;
+	Card(Suit suit, Rank rank) {
 		this.suit = suit;
+		this.rank = rank;
 	}
 
 	//カードの表示用

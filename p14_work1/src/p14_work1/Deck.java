@@ -9,7 +9,7 @@ public class Deck {
 	static {
 		for (Suit suit : Suit.values()) {
 			for (Rank rank : Rank.values()) {
-				protoDeck.add(new Card(rank, suit));
+				protoDeck.add(new Card(suit, rank));
 			}
 		}
 	}
