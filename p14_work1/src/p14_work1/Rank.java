@@ -35,4 +35,14 @@ public enum Rank {
 		this.label = label;
 		this.strength = strength;
 	}
+
+//中断データ読込用
+	static Rank getRankValue(String label) {
+		for(Rank z : Rank.values()) {
+			if(z.getLabel().equals(label)) {
+				return z;
+			}
+		}
+		return null;
+	}
 }
