@@ -6,8 +6,8 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class Main_10_6 {
-	private static String userHome = System.getProperty("user.home");
-	private static final String PROPERTIES_FILE = userHome + "\\Desktop\\p10-6_work1_output.properties";
+	private static final String HOME = System.getProperty("user.home");
+	private static final String PROPERTIES_FILE = HOME + "/Desktop/p10-6_work1_output.properties";
 
 	public static void main(String[] args) {
 		Properties properties = new Properties();
