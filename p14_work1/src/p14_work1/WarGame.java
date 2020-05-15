@@ -45,6 +45,7 @@ public class WarGame {
 				roundCount = 1,			//ラウンド数 1からスタート
 				gotNumPlayer1 = 0,		//中断データ用 プレーヤー1が獲得した数
 				gotNumPlayer2 = 0;		//中断データ用 プレーヤー2が獲得した数
+	static boolean breakFileReaded = true;
 	static Scanner scanner = new Scanner(System.in);
 	static List<Card> handPlayer1 = new ArrayList<Card>();	//プレイヤー１の手札作成
 	static List<Card> handPlayer2 = new ArrayList<Card>();	//プレイヤー２の手札作成
@@ -120,7 +121,6 @@ public class WarGame {
 		File gameBreak = new File(BREAK_FILE);
 		String choiceRestart;
 		if(gameBreak.exists()) {
-			String readed = null;
 			try (
 					BufferedReader reader = Files.newBufferedReader(Paths.get(BREAK_FILE));
 				) {
@@ -144,21 +144,20 @@ public class WarGame {
 						}
 					} else if(rowNum == 4) {
 						if(line == null) {
-							line = UNREADED;
+							breakFileReaded = false;
 						}
-						readed = line;
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(readed.equals(READED)) {
+			if(breakFileReaded) {
 				//中断データに「読込済み」の行があれば読み込まない
 				System.out.print(NEW_LINE);
 				System.out.println("中断データ（" + BREAK_FILE_NAME + "）は" + READED + "です");
 				//新規ゲーム
 				newGame();
-			} else if(!readed.equals(READED)) {
+			} else if(!breakFileReaded) {
 				//中断データの読込
 				System.out.print(NEW_LINE);
 				System.out.println("中断データが見つかりました。");
@@ -304,13 +303,15 @@ public class WarGame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try (
-
-				BufferedWriter outputBreak = new BufferedWriter(new FileWriter(BREAK_FILE, true));
-			){
-			outputBreak.write(READED + NEW_LINE);
-		} catch (IOException e) {
-			e.printStackTrace();
+		File gameBreak = new File(BREAK_FILE);
+		if(gameBreak.exists() && !breakFileReaded) {
+			try (
+					BufferedWriter outputBreak = new BufferedWriter(new FileWriter(BREAK_FILE, true));
+				){
+				outputBreak.write(READED + NEW_LINE);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.print(NEW_LINE);
 		System.out.println("結果を保存しました。");
